@@ -1,72 +1,37 @@
 from datetime import datetime
-from typing import List,Union
-
+from typing import List, Union
+from Problema02.InstrumentoEvaluacion import InstrumentoEvaluacion
 from Problema02.PreguntasCerradas import PreguntasCerradas
 
-
 class Evaluacion:
+    def __init__(self, nombre_profesor: str, nombre_curso: str, año: int, periodo: str):
+        self.nombre_profesor = nombre_profesor
+        self.nombre_curso = nombre_curso
+        self.año = año
+        self.periodo = periodo
+        self.instrumento_evaluacion = None
+        self.respuestas: List[Union[int, str]] = []
+        self.fecha = datetime.now()
 
-  __nombreProfesor= ''
-  __nombreCurso = ''
-  __periodo = ''
-  __InstrumentoEvaluacion = ''
-  __respuestas = ''
-  __año = 0
-  --fecha = datetime
-
-
-def __init__(self, __nombreProfesor: str, __nombrecurso: str, __año: int, __periodo: str,__InstrumentoEvaluacion: str,__respuestas: str,__fecha: datetime):
-    self.nombreProfesor = __nombreProfesor
-    self.nombreCurso = __nombrecurso
-    self.año = __año
-    self.periodo = __periodo
-    self.instrumentoEvaluacion = __InstrumentoEvaluacion
-    self.respuestas: List[Union[int, str]]
-    self.fecha = datetime.now()
-
-def getnombreProfesor(self):
-    return self.__nombreProfesor
-def setnombreProfesor(self,nombreProfesor):
-   self.__nombreProfesor = nombreProfesor
-
-def getnombreCurso(self):
-    return self.__nombreCurso
-def setnombreCurso(self,nombreCurso):
-   self.__nombreCurso = nombreCurso
-
-def getperiodo(self):
-    return self.__periodo
-def setperiodo(self,periodo):
-    self.__periodo = periodo
-
-def getInstrumentoEvaluacion(self):
-        return self.__InstrumentoEvaluacion
-def setInstrumentoEvaluacion(self,InstrumentoEvaluacion):
-        self.__InstrumentoEvaluacion = InstrumentoEvaluacion
-
-def getrespuestas(self):
-    return self.__respuestas
-def setrespuestas(self,respuestas):
-    self.__respuestas = respuestas
-
-def responder_preguntas(self,indice: int,respuestas: Union[int,str]):
-    if 0 <= indice < len(self.instrumentoEvaluacion.preguntas):
-        pregunta = self.instrumentoEvaluacion.preguntas[indice]
-        if isinstance(pregunta,PreguntasCerradas):
-            if pregunta.validar_respuesta(respuestas):
-                self.respuestas.append(respuestas)
+    def responder_pregunta(self, indice: int, respuesta: Union[int, str]):
+        if self.instrumento_evaluacion and 0 <= indice < len(self.instrumento_evaluacion.preguntas):
+            pregunta = self.instrumento_evaluacion.preguntas[indice]
+            if isinstance(pregunta, PreguntasCerradas):
+                if pregunta.validar_respuesta(respuesta):
+                    self.respuestas.append(respuesta)
+                else:
+                    raise ValueError('Respuesta inválida')
             else:
-                raise ValueError('Respuesta inavalida ')
-        else:
-            self.respuestas.append(respuestas)
+                self.respuestas.append(respuesta)
 
-def calcular_puntuacion(self) -> float:
-    puntuacion_total = 0
-    total_preguntas = 0
-
-    for i, preguntas in enumerate(self.instrumentoEvaluacion.preguntas):
-        if isinstance(preguntas,PreguntasCerradas) and i < len(self.respuestas):
-          puntuacion_total += preguntas.valores[self.respuestas[i]]
-          total_preguntas += 1
-          return puntuacion_total / total_preguntas if total_preguntas > 0 else 0
+    def calcular_puntuacion(self) -> float:
+        if not self.instrumento_evaluacion:
+            return 0
+        puntuacion_total = 0
+        total_preguntas = 0
+        for i, pregunta in enumerate(self.instrumento_evaluacion.preguntas):
+            if isinstance(pregunta, PreguntasCerradas) and i < len(self.respuestas):
+                puntuacion_total += pregunta.valores[self.respuestas[i]]
+                total_preguntas += 1
+        return puntuacion_total / total_preguntas if total_preguntas > 0 else 0
 

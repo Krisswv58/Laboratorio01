@@ -1,23 +1,23 @@
-from gettext import textdomain
-
 class Preguntas:
+    def __init__(self, texto: str, categoria: str):
+        self._texto = texto
+        self._categoria = categoria
 
-    __texto = ''
-    __categoria = ''
+    @property
+    def texto(self):
+        return self._texto
 
-def __init__(self, __texto: str, __categoria: str):
-    self.__texto = __texto
-    self.__categoria = __categoria
+    @texto.setter
+    def texto(self, valor):
+        self._texto = valor
 
-def gettexto(self):
-    return self.__texto
-def settexto(self,texto):
-    self.__texto = texto
+    @property
+    def categoria(self):
+        return self._categoria
 
-def getcategoria(self):
-    return self.__categoria
-def setcategoria(self,categoria):
-    self.__categoria = categoria
+    @categoria.setter
+    def categoria(self, valor):
+        self._categoria = valor
 
-def mostrar(self):
-    print(f"Pregunta: {self.texto}")
+    def mostrar(self):
+        print(f"Pregunta: {self.texto}")
